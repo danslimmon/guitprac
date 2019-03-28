@@ -1,0 +1,7 @@
+# binaries
+guitprac
+
+# editor swapfiles
+.*.sw?
+.sw?
+*~
