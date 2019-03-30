@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
 	"time"
 )
 
@@ -29,6 +30,8 @@ func main() {
 	}
 
 	fmt.Println("start one octave above the lowest G")
+	fmtr := &DegreeStepsFormatter{}
+	fmtr.Start(pos.Degree)
 	for i := 0; i < 32; i++ {
 		newDegree, direction := degDir()
 		var newPos position
@@ -36,13 +39,15 @@ func main() {
 		var directionName string
 
 		if direction == 1 {
-			directionName = "UP"
+			directionName = "up"
 			moveInterval = majorScale.DistanceUp(pos.Degree, newDegree)
 			newPos = position{pos.Halfsteps + moveInterval.Halfsteps, newDegree}
+			fmtr.AddStep(directionName, newDegree)
 		} else {
-			directionName = "DOWN"
+			directionName = "down"
 			moveInterval = majorScale.DistanceDown(pos.Degree, newDegree)
 			newPos = position{pos.Halfsteps - moveInterval.Halfsteps, newDegree}
+			fmtr.AddStep(directionName, newDegree)
 		}
 
 		if newPos.Halfsteps < bottomLimit || newPos.Halfsteps > topLimit {
@@ -50,9 +55,6 @@ func main() {
 			continue
 		}
 		pos = newPos
-		fmt.Printf("%-4s to the nearest %-4s (comes to %2d half-steps up from original note)\n", directionName, pos.Degree.Name, pos.Halfsteps)
-		if i%4 == 3 && i < 31 {
-			fmt.Println()
-		}
 	}
+	fmtr.Flush(os.Stdout)
 }
