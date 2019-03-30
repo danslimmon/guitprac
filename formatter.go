@@ -5,31 +5,31 @@ import (
 	"strings"
 )
 
-type fullScalesFormatterStep struct {
+type degreeStepsFormatterStep struct {
 	Direction string
 	Degree    ScaleDegree
 }
 
-type FullScalesFormatter struct {
-	steps []fullScalesFormatterStep
+type DegreeStepsFormatter struct {
+	steps []degreeStepsFormatterStep
 }
 
-func (fmtr *FullScalesFormatter) Start(deg ScaleDegree) {
-	fmtr.steps = []fullScalesFormatterStep{{"", deg}}
+func (fmtr *DegreeStepsFormatter) Start(deg ScaleDegree) {
+	fmtr.steps = []degreeStepsFormatterStep{{"", deg}}
 }
 
-func (fmtr *FullScalesFormatter) AddStep(direction string, degree ScaleDegree) {
-	fmtr.steps = append(fmtr.steps, fullScalesFormatterStep{direction, degree})
+func (fmtr *DegreeStepsFormatter) AddStep(direction string, degree ScaleDegree) {
+	fmtr.steps = append(fmtr.steps, degreeStepsFormatterStep{direction, degree})
 }
 
-func (fmtr *FullScalesFormatter) Flush(output io.Writer) {
+func (fmtr *DegreeStepsFormatter) Flush(output io.Writer) {
 	rsltRows := fmtr.getRows()
 	rslt := strings.Join(rsltRows, "\n")
 	rslt = strings.Join([]string{rslt, "\n"}, "")
 	_, _ = output.Write([]byte(rslt))
 }
 
-func (fmtr *FullScalesFormatter) getRows() []string {
+func (fmtr *DegreeStepsFormatter) getRows() []string {
 	if len(fmtr.steps) == 0 {
 		return []string{}
 	}
@@ -65,7 +65,7 @@ func (fmtr *FullScalesFormatter) getRows() []string {
 	return rows
 }
 
-func (fmtr *FullScalesFormatter) pad(s string, w int) string {
+func (fmtr *DegreeStepsFormatter) pad(s string, w int) string {
 	if w < len(s) {
 		return s
 	}
